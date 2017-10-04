@@ -1,7 +1,14 @@
 <?php
 
 $params = require(__DIR__ . '/params.php');
+$secretParamsPath = __DIR__ . '/secret_params.php';
 $db = require(__DIR__ . '/db.php');
+
+if (realpath($secretParamsPath)) {
+    $secretParams = require($secretParamsPath);
+} else {
+    $secretParams = [];
+}
 
 $config = [
     'id' => 'basic',
@@ -10,7 +17,7 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'ox-4hB7Kd6q1ZJ41-LB34oxnnt6VTM69',
+            'cookieValidationKey' => isset($secretParams['cookieValidationKey']) ? $secretParams['cookieValidationKey'] : 'ox-4hB7Kd6q1ZJ41-LB34oxnnt6VTM69',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
