@@ -10,6 +10,7 @@ class m171124_140441_create_table_users extends Migration
             'id' => $this->primaryKey(),
             'username' => $this->text()->notNull(),
             'email' => $this->text()->notNull(),
+            'password' => $this->text()->notNull(),
             'role' => $this->integer()->notNull(),
             'authkey' => $this->text()->notNull(),
             'access_token' => $this->text()->notNull()
