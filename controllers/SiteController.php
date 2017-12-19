@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
 
 class SiteController extends Controller
 {
@@ -77,7 +78,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            if (User::isAdmin()) {
+                return $this->redirect(['/admin']);
+            } else {
+                return $this->goBack();
+            }
         }
         return $this->render('login', [
             'model' => $model,
