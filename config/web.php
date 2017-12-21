@@ -12,6 +12,7 @@ if (realpath($secretParamsPath)) {
 
 $config = [
     'id' => 'basic',
+    'language' => 'uk',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [

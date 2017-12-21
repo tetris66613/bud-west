@@ -13,15 +13,15 @@ namespace app\modules\admin\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\User;
 use yii\web\ForbiddenHttpException;
+use app\models\User;
 
 class AdminController extends Controller
 {
     public function beforeAction($action)
     {
         if (!User::checkIsAdmin()) {
-            throw new ForbiddenHttpException(Yii::t('app', 'You not allowed to perform this action'));
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
         }
 
         return parent::beforeAction($action);

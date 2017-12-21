@@ -10,6 +10,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     const ROLE_USER = 2;
     const ROLE_DEMO = 3;
 
+    public static function rolesItems()
+    {
+        return [
+            self::ROLE_ADMIN => Yii::t('app', 'Administrator'),
+            self::ROLE_USER => Yii::t('app', 'User'),
+            self::ROLE_DEMO => Yii::t('app', 'Demo'),
+        ];
+    }
+
     public static function tableName()
     {
         return 'users';
@@ -138,4 +147,16 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     /**
      *  End block with checking user role
      */
+
+    public function renderRole()
+    {
+        return self::sRenderRole($this);
+    }
+
+    public static function sRenderRole($data)
+    {
+        $key = is_int($data) ? $data : $data['role'];
+
+        return isset(self::rolesItems()[$key]) ? self::rolesItems()[$key] : Yii::t('app', 'Unknown role');
+    }
 }
