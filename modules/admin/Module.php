@@ -6,6 +6,8 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
+    public $layout = 'main';
+
     public function init()
     {
         parent::init();
