@@ -2,31 +2,10 @@
 
 namespace app\modules\admin\controllers;
 
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use app\models\User;
+use app\modules\admin\controllers\AdminController;
 
-class DefaultController extends Controller
+class DefaultController extends AdminController
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function($rule, $action) {
-                            return User::checkIsAdmin();
-                        },
-                    ],
-                ],
-            ],
-        ];
-    }
-
-
     public function actionIndex()
     {
         return $this->render('index');
