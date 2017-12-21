@@ -78,7 +78,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            if (User::isAdmin()) {
+            if (User::checkIsAdmin()) {
                 return $this->redirect(['/admin']);
             } else {
                 return $this->goBack();

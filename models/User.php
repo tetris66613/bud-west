@@ -82,14 +82,43 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
 
+    /**
+     *  Begin block with checking user role
+     */
+
+    protected function prepareCheckUser($user = null)
+    {
+        return $user ? $user : $this;
+    }
+
     public function isAdmin($user = null)
     {
-        return self::checkIsAdmin($user);
+        return self::checkIsAdmin($this->prepareCheckUser($user));
+    }
+
+    public function isUser($user = null)
+    {
+        return self::checkIsUser($this->prepareCheckUser($user));
+    }
+
+    public function isDemo($user = null)
+    {
+        return self::checkIsDemo($this->prepareCheckUser($user));
     }
 
     public static function checkIsAdmin($user = null)
     {
         return self::checkRole(User::ROLE_ADMIN, $user);
+    }
+
+    public static function checkIsUser($user = null)
+    {
+        return self::checkRole(User::ROLE_USER, $user);
+    }
+
+    public static function checkIsDemo($user = null)
+    {
+        return self::checkRole(User::ROLE_DEMO, $user);
     }
 
     public static function checkRole($role, $user = null)
@@ -105,4 +134,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return $user->role === $role;
         }
     }
+
+    /**
+     *  End block with checking user role
+     */
 }

@@ -18,7 +18,7 @@ class DefaultController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function($rule, $action) {
-                            return User::isAdmin();
+                            return User::checkIsAdmin();
                         },
                     ],
                 ],
