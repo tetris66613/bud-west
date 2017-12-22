@@ -6,13 +6,16 @@ use yii\web\AssetBundle;
 
 class AdminAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
+    public $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'files';
+
     public $css = [
-        'css/site.css',
+        'css/main.css',
     ];
+
     public $js = [
+        // 'js/main.js',
     ];
+
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
