@@ -3,6 +3,7 @@
 namespace app\commands;
 
 use Yii;
+use yii\base\Security;
 use yii\console\Controller;
 use app\models\User;
 
@@ -18,9 +19,11 @@ class AdminController extends Controller
             return 0;
         }
 
+        $security = Yii::$app->getSecurity();
         $user = new User();
         $user->email = $email;
-        $user->password = Yii::$app->getSecurity()->generatePasswordHash($password);
+        $user->password = $security->generatePasswordHash($password);
+        $user->authkey = $security->generateRandomString();
         $user->role = User::ROLE_ADMIN;
 
         if (!$user->insert()) {
@@ -41,7 +44,9 @@ class AdminController extends Controller
             return 0;
         }
 
-        $user->password = Yii::$app->getSecurity()->generatePasswordHash($newpassword);
+        $security = Yii::$app->getSecurity();
+        $user->password = $security->generatePasswordHash($newpassword);
+        $user->authkey = $security->generateRandomString();
         if (!$user->update()) {
             echo 'cannot reset user, some problem' . PHP_EOL;
         }

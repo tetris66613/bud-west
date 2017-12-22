@@ -12,15 +12,15 @@ class m171124_140441_create_table_users extends Migration
             'email' => $this->string(256)->notNull()->unique(),
             'password' => $this->text()->notNull(),
             'role' => $this->integer()->notNull(),
-            'authkey' => $this->text(),
+            'authkey' => $this->text()->notNull(),
             'access_token' => $this->text()
         ]);
     }
 
     public function safeDown()
     {
-        // $this->dropTable('users');
-        echo 'not available to drop users table' . PHP_EOL;
-        return false;
+        $this->dropTable('users');
+        // echo 'not available to drop users table' . PHP_EOL;
+        // return false;
     }
 }

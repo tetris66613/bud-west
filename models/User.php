@@ -24,6 +24,14 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
+    public function rules()
+    {
+        return [
+            [['email', 'role'], 'required'],
+            ['role', 'in', 'range' => array_keys(self::rolesItems())],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
