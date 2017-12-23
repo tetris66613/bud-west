@@ -28,6 +28,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['email', 'role'], 'required'],
+            ['email', 'email'],
+            ['email', 'unique'],
+            ['username', 'unique'],
             ['role', 'in', 'range' => array_keys(self::rolesItems())],
         ];
     }
@@ -62,6 +65,11 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function findByEmail($email)
     {
         return static::findOne(['email' => $email]);
+    }
+
+    public static function findByAttribute($attr, $value)
+    {
+        return static::findOne([$attr => $value]);
     }
 
     /**

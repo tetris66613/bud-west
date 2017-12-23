@@ -14,11 +14,6 @@ class AdminController extends Controller
      */
     public function actionCreate($email, $password)
     {
-        if (User::findByEmail($email)) {
-            echo 'user already exists with this email: '. $email . PHP_EOL;
-            return 0;
-        }
-
         $security = Yii::$app->getSecurity();
         $user = new User();
         $user->email = $email;
@@ -28,6 +23,14 @@ class AdminController extends Controller
 
         if (!$user->insert()) {
             echo 'user cannot be created, some problem' . PHP_EOL;
+            if ($user->hasErrors()) {
+                foreach ($user->getErrors() as $attr => $errors) {
+                    echo "Attribute $attr has errors:" . PHP_EOL;
+                    foreach ($errors as $error) {
+                        echo "\t$error" . PHP_EOL;
+                    }
+                }
+            }
             return 0;
         }
 

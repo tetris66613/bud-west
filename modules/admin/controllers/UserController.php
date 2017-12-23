@@ -15,9 +15,9 @@ class UserController extends AdminController
     public function actionIndex()
     {
         $usersData = new ActiveDataProvider([
-            'query' => User::find()->select(['id', 'email', 'role']),
+            'query' => User::find()->select(['id', 'email', 'username', 'role']),
             'pagination' => [
-                'pageSize' => 1,
+                'pageSize' => 20,
             ],
         ]);
 
