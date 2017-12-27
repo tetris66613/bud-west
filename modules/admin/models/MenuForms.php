@@ -4,7 +4,9 @@ namespace app\modules\admin\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use app\models\Menu;
+use app\widgets\Ajax;
 
 class MenuForms extends Model
 {
@@ -47,6 +49,50 @@ class MenuForms extends Model
         return $this->getScenario();
     }
 
+    public function rules()
+    {
+        return [
+            [['type', 'level', 'parent', 'order', 'enabled', 'title'], 'required'],
+            ['type', 'in', 'range' => array_keys($this->typeItems())],
+            ['level', 'in', 'range' => array_keys($this->levelItems())],
+            ['parent', 'in', 'range' => array_keys($this->parentItems())],
+            ['enabled', 'in', 'range' => array_keys($this->enabledItems())],
+            ['order', 'integer', 'min' => 1],
+            ['title', 'string'],
+        ];
+    }
+
+
+    public function typeItems()
+    {
+        return Menu::typeItems();
+    }
+
+    public function levelItems()
+    {
+        $items = Menu::levelItems();
+        if (!Menu::find()->where(['type' => $this->type, 'level' => Menu::LEVEL_ROOT])->count()) {
+            unset($items[Menu::LEVEL_CHILD_1]);
+        }
+
+        return $items;
+    }
+
+    public function parentItems()
+    {
+        if ($this->level == Menu::LEVEL_ROOT) {
+            return [0 => Yii::t('app', 'Root cannot have parent')];
+        }
+
+        $items = Menu::find()->where(['type' => $this->type, 'level' => Menu::LEVEL_ROOT])->asArray()->all();
+        return ArrayHelper::map($items, 'id', 'title');
+    }
+
+    public function enabledItems()
+    {
+        return Menu::enabledItems();
+    }
+
     public function renderFormFields($form, $attributeWrappers = [])
     {
         $content = '';
@@ -65,17 +111,26 @@ class MenuForms extends Model
 
     public function renderTypeField($form)
     {
-        return $form->field($this, 'type')->dropDownList(Menu::typeItems());
+        return $form->field($this, 'type')->dropDownList(Menu::typeItems(), ['onchange' => Ajax::post(['admin/menu/update-model', 'scenario' => $this->getScenario()])]);
     }
 
     public function renderLevelField($form)
     {
-        return $form->field($this, 'level')->dropDownList(Menu::levelItems());
+        $levelItems = $this->levelItems();
+        if (!$levelItems) return '';
+        return $form->field($this, 'level')->dropDownList($levelItems, ['onchange' => Ajax::post(['/admin/menu/update-model', 'scenario' => $this->getScenario()])]);
+    }
+
+    public function renderParentField($form)
+    {
+        $parentItems = $this->parentItems();
+        if ($this->level == Menu::LEVEL_ROOT || !$parentItems) return '';
+        return $form->field($this, 'parent')->dropDownList($parentItems);
     }
 
     public function renderEnabledField($form)
     {
-        return $form->field($this, 'enabled')->radioList(Menu::enabledItems());
+        return $form->field($this, 'enabled')->radioList($this->enabledItems());
     }
 
     public function requestCreate()

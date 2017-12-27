@@ -10,6 +10,7 @@ class Menu extends ActiveRecord
 {
     // predefined menus types
     const TYPE_CLIENT_NAVBAR = 1;
+    const TYPE_TEST = 2;
 
     const LEVEL_ROOT = 0;
     const LEVEL_CHILD_1 = 1;
@@ -61,6 +62,7 @@ class Menu extends ActiveRecord
     {
         return [
             self::TYPE_CLIENT_NAVBAR => Yii::t('app', 'Client navbar'),
+            self::TYPE_TEST => Yii::t('app', 'Test type'),
         ];
     }
 
