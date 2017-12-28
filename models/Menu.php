@@ -18,6 +18,9 @@ class Menu extends ActiveRecord
     const ENABLED_FALSE = 0;
     const ENABLED_TRUE = 1;
 
+    // not related to any parent
+    const PARENT_NO = 0;
+
     const DEFAULT_PARENT = 0;
     const DEFAULT_ORDER = 1;
 

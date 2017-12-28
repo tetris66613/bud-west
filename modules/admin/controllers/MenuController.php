@@ -3,6 +3,7 @@
 namespace app\modules\admin\controllers;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 use app\models\Menu;
 use app\modules\admin\controllers\AdminController;
 use app\modules\admin\models\MenuForms;
@@ -31,6 +32,42 @@ class MenuController extends AdminController
         ]);
     }
 
+    public function actionEdit($id)
+    {
+        $menu = Menu::findOne($id);
+
+        if (!$menu) {
+            throw new NotFoundHttpException(Yii::t('app', 'Menu not found'));
+        }
+
+        $model = new MenuForms(['scenario' => MenuForms::SCENARIO_MENU_EDIT]);
+
+        if ($model->requestEdit($menu)) {
+            return $this->redirect(['index']);
+        }
+
+
+        $model->setAttributes($menu->getAttributes());
+        $modelDelete = new MenuForms(['scenario' => MenuForms::SCENARIO_MENU_DELETE]);
+        $modelDelete->setAttributes($menu->getAttributes());
+
+        return $this->render('edit', [
+            'model' => $model,
+            'modelDelete' => $modelDelete,
+        ]);
+    }
+
+    public function actionDelete()
+    {
+        $model = new MenuForms(['scenario' => MenuForms::SCENARIO_MENU_DELETE]);
+
+        if ($model->requestDelete()) {
+            return $this->redirect(['index']);
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'Menu not found or already removed'));
+    }
+
     public function actionUpdateModel($scenario)
     {
         $model = new MenuForms(['scenario' => $scenario]);
@@ -42,4 +79,5 @@ class MenuController extends AdminController
 
         return preg_replace(['/<form.+?>/', '/<\/form>/'], '', $content);
     }
+
 }
