@@ -5,7 +5,7 @@ namespace app\modules\admin\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use app\models\Menu;
-use app\models\DynamicRuleModel as Model;
+use app\models\CustomModel as Model;
 use app\widgets\Ajax;
 
 class MenuForms extends Model
@@ -175,26 +175,6 @@ class MenuForms extends Model
         }
 
         return $items;
-    }
-
-    public function renderFormFields($form, $attributeWrappers = [])
-    {
-        $content = '';
-        foreach (self::activeAttributes() as $attribute) {
-            $ucattr = ucfirst($attribute);
-            $fieldMethod = "render${ucattr}Field";
-            if (method_exists($this, $fieldMethod)) {
-                $content .= $this->$fieldMethod($form);
-            } else {
-                if ($attribute == 'id') {
-                    $content .= $form->field($this, $attribute)->hiddenInput()->label(false);
-                } else {
-                    $content .= $form->field($this, $attribute);
-                }
-            }
-        }
-
-        return $content;
     }
 
     public function renderTypeField($form)

@@ -13,8 +13,13 @@ use app\widgets\Glyphicon;
         'title',
         [
             'class' => ActionColumn::className(),
-            'template' => '',
+            'template' => '{edit}',
             'header' => Html::a(Glyphicon::icon('plus') . ' Create', ['create'], ['class' => 'btn btn-sm btn-success']),
+            'buttons' => [
+                'edit' => function($url, $model) {
+                    return Html::a(Glyphicon::icon('pencil') . ' Edit', ['edit', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']);
+                },
+            ],
         ],
     ],
 ]) ?>

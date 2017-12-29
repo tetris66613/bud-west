@@ -1,7 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-
 ?>
 
 <div class="row">
@@ -12,6 +10,4 @@ use yii\helpers\Html;
     </div>
 </div>
 
-<?= $this->render('form', [
-    'model' => $model,
-]) ?>
+<?= $this->render('form', ['model' => $model]) ?>
