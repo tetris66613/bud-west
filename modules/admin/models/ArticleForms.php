@@ -5,6 +5,7 @@ namespace app\modules\admin\models;
 use Yii;
 use app\models\CustomModel as Model;
 use app\models\Article;
+use dosamigos\tinymce\TinyMce;
 
 class ArticleForms extends Model
 {
@@ -51,6 +52,14 @@ class ArticleForms extends Model
         }
 
         return false;
+    }
+
+    public function renderContentField($form)
+    {
+        return $form->field($this, 'content')->widget(TinyMce::className(), [
+            'language' => Yii::$app->language,
+            'options' => ['rows' => 20],
+        ]);
     }
 
     public function requestEdit(&$article)
