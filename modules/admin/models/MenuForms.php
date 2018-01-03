@@ -4,6 +4,8 @@ namespace app\modules\admin\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use app\models\ArticleRelate;
+use app\models\ArticleType;
 use app\models\Menu;
 use app\models\CustomModel as Model;
 use app\widgets\Ajax;
@@ -280,6 +282,8 @@ class MenuForms extends Model
                 if ($menu->level == Menu::LEVEL_ROOT) {
                     Menu::deleteAll(['parent' => $this->id]);
                 }
+
+                ArticleRelate::deleteAll(['type_id' => [ArticleType::RELATE_MENU_UNIQUE, ArticleType::RELATE_MENU_LIST], 'related_id' => $this->id]);
 
                 $menu->delete();
 

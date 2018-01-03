@@ -8,6 +8,7 @@ use yii\base\Widget;
 class Ajax extends Widget
 {
     public $action;
+    public $replaceFunc = 'html';
     public $replacement = '$(this).closest(\'form\')';
 
     public $params;
@@ -18,6 +19,7 @@ class Ajax extends Widget
     {
         $url = $this->prepareUrl($this->action);
         $replacement = ($this->replacement[0] == '$') ? $this->replacement : '$(\'' . $this->replacement . '\')';
+        $func = $this->replaceFunc;
 
         return "
             var obj = $replacement;
@@ -26,7 +28,7 @@ class Ajax extends Widget
                 url: '$url',
                 data: $(this).closest('form').serialize(),
                 success: function(response) {
-                    obj.html(response);
+                    obj.$func(response);
                 },
                 error: function() {
                     console.log('Problem with updating model');

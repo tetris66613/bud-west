@@ -3,8 +3,13 @@
 namespace app\modules\admin\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use app\models\CustomModel as Model;
 use app\models\Article;
+use app\models\ArticleRelate;
+use app\models\ArticleType;
+use app\models\Menu;
+use app\widgets\Ajax;
 use dosamigos\tinymce\TinyMce;
 
 class ArticleForms extends Model
@@ -13,15 +18,31 @@ class ArticleForms extends Model
     const SCENARIO_EDIT = 'article_edit';
     const SCENARIO_DELETE = 'article_delete';
 
+    const ALL_MENU_TYPES = Menu::TYPE_CLIENT_NAVBAR - 1;
+    const ALL_MENU_LEVELS = Menu::LEVEL_ROOT - 1;
+
     public $id = 0;
     public $title;
     public $content;
+    public $relatedType = ArticleType::RELATE_NO;
+    public $menuRelatedType = self::ALL_MENU_TYPES;
+    public $menuRelatedLevel = self::ALL_MENU_LEVELS;
+    public $relatedId;
+
+    private $onchangeRelateArticle;
+
+    public function init()
+    {
+        parent::init();
+        $updateModelAction = ['admin/article/update-model', 'scenario' => $this->getScenario()];
+        $this->onchangeRelateArticle = Ajax::post($updateModelAction, 'div#update-article-model', ['replaceFunc' => 'replaceWith']);
+    }
 
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            self::SCENARIO_CREATE => ['title', 'content'],
-            self::SCENARIO_EDIT => ['id', 'title', 'content'],
+            self::SCENARIO_CREATE => ['title', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
+            self::SCENARIO_EDIT => ['id', 'title', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
             self::SCENARIO_DELETE => ['id'],
         ]);
     }
@@ -37,21 +58,70 @@ class ArticleForms extends Model
             [['id', 'title', 'content'], 'required'],
             [['title', 'content'], 'filter', 'filter' => 'trim'],
             [['title', 'content'], 'string'],
+            ['relatedType', 'in', 'range' => array_keys($this->relateTypeItems())],
         ];
     }
 
-    public function requestCreate()
+    public function dynamicRules()
     {
-        if ($this->load(Yii::$app->request->post()) && $this->validate()) {
-            $article = new Article();
-            $article->setAttributes($this->getActiveAttributes());
+        return [
+            ['menuRelatedType', 'in', 'range' => array_keys($this->menuRelatedTypeItems())],
+            ['menuRelatedLevel', 'in', 'range' => array_keys($this->menuRelatedLevelItems())],
+            ['relatedId', 'in', 'range' => array_keys($this->relatedIdItems())],
+        ];
+    }
 
-            if ($article->save()) {
-                return true;
-            }
+    public function setRelatedAttributes($related)
+    {
+        if ($related) {
+            $this->relatedType = $related['type_id'];
+            $this->relatedId = $related['related_id'];
+        }
+    }
+
+    public function relateTypeItems()
+    {
+        return ArticleType::typeItems(false);
+    }
+
+    public function menuRelatedTypeItems()
+    {
+        return ArrayHelper::merge([self::ALL_MENU_TYPES => Yii::t('app', 'All menu types')], Menu::typeItems());
+    }
+
+    public function menuRelatedLevelItems()
+    {
+        return ArrayHelper::merge([self::ALL_MENU_LEVELS => Yii::t('app', 'All menu levels')], Menu::levelItems());
+    }
+
+    public function relatedIdItems()
+    {
+        // related id not only menu for future
+        $query = Menu::find();
+        if ($this->menuRelatedType != self::ALL_MENU_TYPES) {
+            $query->andWhere(['type' => $this->menuRelatedType]);
+        }
+        if ($this->menuRelatedLevel != self::ALL_MENU_LEVELS) {
+            $query->andWhere(['level' => $this->menuRelatedLevel]);
         }
 
-        return false;
+        $relatedIdnotin = [];
+
+        if ($this->relatedType == ArticleType::RELATE_MENU_UNIQUE) {
+            $relatedIdnotin = ArticleRelate::find()->select('related_id')->where(['type_id' => ArticleType::RELATE_MENU_UNIQUE])->column();
+        }
+
+        // exclude related id for edit themself
+        if ($this->scenario == self::SCENARIO_EDIT && $this->relatedId) {
+            unset($relatedIdnotin[array_search($this->relatedId, $relatedIdnotin)]);
+        }
+
+        if ($relatedIdnotin) {
+            $query->andWhere(['not in', 'id', $relatedIdnotin]);
+        }
+
+        $items = ArrayHelper::map($query->asArray()->all(), 'id', 'title');
+        return $items;
     }
 
     public function renderContentField($form)
@@ -62,13 +132,72 @@ class ArticleForms extends Model
         ]);
     }
 
+    public function renderRelatedTypeField($form)
+    {
+        return $form->field($this, 'relatedType')->dropDownList($this->relateTypeItems(), ['onchange' => $this->onchangeRelateArticle]);
+    }
+
+    public function renderMenuRelatedTypeField($form)
+    {
+        if (!$this->relatedType) return '';
+        return $form->field($this, 'menuRelatedType')->dropDownList($this->menuRelatedTypeItems(), ['onchange' => $this->onchangeRelateArticle]);
+    }
+
+    public function renderMenuRelatedLevelField($form)
+    {
+        if (!$this->relatedType) return '';
+        return $form->field($this, 'menuRelatedLevel')->dropDownList($this->menuRelatedLevelItems(), ['onchange' => $this->onchangeRelateArticle]);
+    }
+
+    public function renderRelatedIdField($form)
+    {
+        if (!$this->relatedType) return '';
+        return $form->field($this, 'relatedId')->dropDownList($this->relatedIdItems());
+    }
+
+    public function requestCreate()
+    {
+        if ($this->load(Yii::$app->request->post()) && $this->validate()) {
+            $article = new Article();
+            $article->setAttributes($this->getActiveAttributes());
+
+            if ($article->save()) {
+                if ($this->relatedType) {
+                    $articleRelate = new ArticleRelate([
+                        'article_id' => $article->id,
+                        'type_id' => $this->relatedType,
+                        'related_id' => $this->relatedId,
+                    ]);
+
+                    if ($articleRelate->save()) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function requestEdit(&$article)
     {
         if ($this->load(Yii::$app->request->post()) && $this->validate()) {
             $article->setAttributes($this->getActiveAttributes());
 
             if ($article->save()) {
-                return true;
+                if ($this->relatedType) {
+                    $articleRelate = $article->articleRelate;
+                    $articleRelate->related_id = $this->relatedId;
+                    $articleRelate->type_id = $this->relatedType;
+
+                    if ($articleRelate->save()) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
             }
         }
 
@@ -81,6 +210,7 @@ class ArticleForms extends Model
             $article = Article::findOne($this->id);
 
             if ($article && $article->delete()) {
+                ArticleRelate::deleteAll(['article_id' => $this->id]);
                 return true;
             }
         }

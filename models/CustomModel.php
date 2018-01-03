@@ -4,6 +4,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\validators\Validator;
+use app\helpers\Html;
 
 class CustomModel extends Model
 {
@@ -29,21 +30,38 @@ class CustomModel extends Model
         return $this;
     }
 
-    public function renderFormFields($form, $attributeWrappers = [])
+    public function renderFormFields($form, $attributes = [], $attributeWrappers = [])
     {
         $content = '';
-        foreach (self::activeAttributes() as $attribute) {
+        if (!$attributes) $attributes = self::activeAttributes();
+        foreach ($attributes as $attribute) {
+            $attributeContent = '';
             $ucattr = ucfirst($attribute);
             $fieldMethod = "render${ucattr}Field";
             if (method_exists($this, $fieldMethod)) {
-                $content .= $this->$fieldMethod($form);
+                $attributeContent .= $this->$fieldMethod($form);
             } else {
                 if ($attribute == 'id') {
-                    $content .= $form->field($this, $attribute)->hiddenInput()->label(false);
+                    $attributeContent .= $form->field($this, $attribute)->hiddenInput()->label(false);
                 } else {
-                    $content .= $form->field($this, $attribute);
+                    $attributeContent .= $form->field($this, $attribute);
                 }
             }
+
+            $prepend = '<' . $attribute;
+            if (isset($attributeWrappers[$prepend])) {
+                $attributeContent = Html::prepend($attributeContent, $attributeWrappers[$prepend]);
+            }
+            $append = '>' . $attribute;
+            if (isset($attributeWrappers[$append])) {
+                $attributeContent = Html::append($attributeContent, $attributeWrappers[$append]);
+            }
+            if (isset($attributeWrappers[$attribute])) {
+                $attributeContent = Html::wrap($attributeContent, $attributeWrappers[$attribute]);
+            }
+
+            $content .= $attributeContent;
+
         }
 
         return $content;

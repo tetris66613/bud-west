@@ -28,4 +28,14 @@ class Article extends ActiveRecord
             ],
         ]);
     }
+
+    public function getArticleRelateMenu()
+    {
+        return $this->hasOne(Menu::className(), ['id' => 'related_id'])->via('articleRelate');
+    }
+
+    public function getArticleRelate()
+    {
+        return $this->hasOne(ArticleRelate::className(), ['article_id' => 'id']);
+    }
 }

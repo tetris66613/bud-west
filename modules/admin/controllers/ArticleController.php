@@ -34,7 +34,7 @@ class ArticleController extends AdminController
 
     public function actionEdit($id)
     {
-        $article = Article::findOne($id);
+        $article = Article::find()->where(['articles.id' => $id])->joinWith('articleRelate')->one();
 
         if (!$article) {
             throw new NotFoundHttpException(Yii::t('main', 'Article not found'));
@@ -45,6 +45,7 @@ class ArticleController extends AdminController
             return $this->redirect(['index']);
         }
         $model->setAttributes($article->getAttributes());
+        $model->setRelatedAttributes($article->articleRelate);
 
         $modelDelete = new ArticleForms(['scenario' => ArticleForms::SCENARIO_DELETE]);
         $modelDelete->setAttributes($article->getAttributes());
@@ -64,5 +65,19 @@ class ArticleController extends AdminController
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'Article not found or already removed'));
+    }
+
+    public function actionUpdateModel($scenario)
+    {
+        $model = new ArticleForms(['scenario' => $scenario]);
+        $model->load(Yii::$app->request->post());
+
+        $content = $this->renderPartial('fields', [
+            'form' => new \yii\widgets\ActiveForm(),
+            'model' => $model,
+            'attributes' => ['relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
+        ]);
+
+        return $content;
     }
 }
