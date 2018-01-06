@@ -11,12 +11,33 @@ use app\widgets\Glyphicon;
     'dataProvider' => $menuData,
     'columns' => [
         'id',
-        'type',
-        'level',
+        [
+            'attribute' => 'type',
+            'value' => function ($data) {
+                return $data->renderType();
+            },
+        ],
+        [
+            'attribute' => 'level',
+            'value' => function ($data) {
+                return $data->renderLevel();
+            },
+        ],
         'parent',
+        [
+            'attribute' => 'parent',
+            'value' => function ($data) {
+                return $data->renderParentTitle();
+            }
+        ],
         'order',
         'title',
-        'enabled',
+        [
+            'attribute' => 'enabled',
+            'value' => function ($data) {
+                return $data->renderEnabled();
+            },
+        ],
         [
             'class' => ActionColumn::className(),
             'template' => '{edit}',

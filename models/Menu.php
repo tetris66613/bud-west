@@ -29,6 +29,11 @@ class Menu extends ActiveRecord
         return 'menus';
     }
 
+    public function getParentRelation()
+    {
+        return $this->hasOne(self::className(), ['id' => 'parent']);
+    }
+
     public function rules()
     {
         return [
@@ -88,12 +93,35 @@ class Menu extends ActiveRecord
     public static function gridData()
     {
         $data = new ActiveDataProvider([
-            'query' => self::find()->select(['id', 'type', 'level', 'parent', 'order', 'enabled', 'title']),
+            'query' => self::find()->select(['id', 'type', 'level', 'parent', 'order', 'enabled', 'title'])->with('parentRelation'),
             'pagination' => [
                 'pageSize' => 20,
             ],
         ]);
 
         return $data;
+    }
+
+    public function renderType()
+    {
+        $typeItems = self::typeItems();
+        return isset($typeItems[$this->type]) ? $typeItems[$this->type] : Yii::t('app', 'Unknown menu type');
+    }
+
+    public function renderLevel()
+    {
+        $levelItems = self::levelItems();
+        return isset($levelItems[$this->level]) ? $levelItems[$this->level] : Yii::t('app', 'Unknown menu level');
+    }
+
+    public function renderEnabled()
+    {
+        $enabledItems = self::enabledItems();
+        return isset($enabledItems[$this->enabled]) ? $enabledItems[$this->enabled] : Yii::t('app', 'Unknown menu enabled status');
+    }
+
+    public function renderParentTitle()
+    {
+        return ($this->parentRelation) ? $this->parentRelation->title : Yii::t('app', 'No parent');
     }
 }

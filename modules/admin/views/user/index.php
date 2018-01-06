@@ -14,7 +14,7 @@ use app\widgets\Glyphicon;
         'email',
         [
             'attribute' => 'role',
-            'value' => function($data){
+            'value' => function($data) {
                 return $data->renderRole();
             },
         ],
