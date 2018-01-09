@@ -65,7 +65,7 @@ class MenuController extends AdminController
             return $this->redirect(['index']);
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'Menu not found or already removed'));
+        throw new NotFoundHttpException(Yii::t('app', 'Menu not found'));
     }
 
     public function actionUpdateModel($scenario)

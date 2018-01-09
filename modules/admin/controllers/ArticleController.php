@@ -64,7 +64,7 @@ class ArticleController extends AdminController
             return $this->redirect(['index']);
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'Article not found or already removed'));
+        throw new NotFoundHttpException(Yii::t('app', 'Article not found'));
     }
 
     public function actionUpdateModel($scenario)
