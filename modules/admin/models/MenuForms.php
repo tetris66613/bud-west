@@ -294,4 +294,18 @@ class MenuForms extends Model
 
         return false;
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'type' => Module::t('main', 'Type'),
+            'level' => Module::t('main', 'Level'),
+            'parent' => Module::t('main', 'Parent'),
+            'order' => Module::t('main', 'Order'),
+            'enabled' => Module::t('main', 'Enabled'),
+            'title' => Module::t('main', 'Title'),
+            'childTypeConversion' => Module::t('main', 'Child type conversion'),
+            'childParentConversion' => Module::t('main', 'Child parent conversion'),
+        ];
+    }
 }

@@ -226,4 +226,16 @@ class ArticleForms extends Model
 
         return false;
     }
+
+    public function attributeLabels()
+    {
+        return [
+            'title' => Module::t('main', 'Title'),
+            'content' => Module::t('main', 'Content'),
+            'relatedType' => Module::t('main', 'Related type'),
+            'menuRelatedType' => Module::t('main', 'Menu type'),
+            'menuRelatedLevel' => Module::t('main', 'Menu level'),
+            'relatedId' => Module::t('main', 'Relate with'),
+        ];
+    }
 }
