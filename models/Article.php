@@ -38,4 +38,12 @@ class Article extends ActiveRecord
     {
         return $this->hasOne(ArticleRelate::className(), ['article_id' => 'id']);
     }
+
+    public function attributeLavels()
+    {
+        return [
+            'title' => Yii::t('app', 'Title'),
+            'content' => Yii::t('app', 'Content'),
+        ];
+    }
 }

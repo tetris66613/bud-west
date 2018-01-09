@@ -17,6 +17,19 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Content' => 'Контент',
+    'Description' => '',
+    'Email' => 'Ел. адрес',
+    'Level' => 'Рівень',
+    'Order' => 'Порядок',
+    'Parent' => 'Корінь',
+    'Password' => 'Пароль',
+    'Remember me' => 'Запам\'ятати мене',
+    'Role' => 'Роль',
+    'Title' => 'Заголовок',
+    'Type' => 'Тип',
+    'Url' => '',
+    'Username' => '',
     'Admin' => 'Адмін',
     'Administrator' => 'Адміністратор',
     'Client navbar' => 'Клієнтське меню',
@@ -25,7 +38,7 @@ return [
     'Disabled' => 'Виключено',
     'Enabled' => 'Включено',
     'Menu' => 'Меню',
-    'No parent' => 'Не корінь',
+    'No parent' => '-корінь-',
     'No relate' => 'Нема відношення',
     'Relate menu category' => 'Відноситься до категорії меню',
     'Relate menu list' => 'Відносити до списку меню',

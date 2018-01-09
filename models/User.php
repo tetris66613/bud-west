@@ -24,6 +24,15 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'email' => Yii::t('app', 'Email'),
+            'username' => Yii::t('app', 'Username'),
+            'role' => Yii::t('app', 'Role'),
+        ];
+    }
+
     public function rules()
     {
         return [

@@ -16,10 +16,19 @@ class UploadImage extends ActiveRecord
     public static function gridData()
     {
         return new ActiveDataProvider([
-            'query' => self::find()->select(['url', 'title', 'description', 'url']),
+            'query' => self::find()->select(['title', 'description', 'url']),
             'pagination' => [
                 'pageSize' => 20,
             ],
         ]);
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'url' => Yii::t('app', 'Url'),
+            'title' => Yii::t('app', 'Title'),
+            'description' => Yii::t('app', 'Description'),
+        ];
     }
 }

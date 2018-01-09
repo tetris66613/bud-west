@@ -29,6 +29,18 @@ class Menu extends ActiveRecord
         return 'menus';
     }
 
+    public function attributeLavels()
+    {
+        return [
+            'type' => Yii::t('app', 'Type'),
+            'level' => Yii::t('app', 'Level'),
+            'parent' => Yii::t('app', 'Parent'),
+            'order' => Yii::t('app', 'Order'),
+            'enabled' => Yii::t('app', 'Enabled'),
+            'title' => Yii::t('app', 'Title'),
+        ];
+    }
+
     public function getParentRelation()
     {
         return $this->hasOne(self::className(), ['id' => 'parent']);
