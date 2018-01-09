@@ -10,6 +10,7 @@ use app\models\ArticleRelate;
 use app\models\ArticleType;
 use app\models\Menu;
 use app\widgets\Ajax;
+use app\modules\admin\Module;
 use dosamigos\tinymce\TinyMce;
 
 class ArticleForms extends Model
@@ -86,12 +87,12 @@ class ArticleForms extends Model
 
     public function menuRelatedTypeItems()
     {
-        return ArrayHelper::merge([self::ALL_MENU_TYPES => Yii::t('app', 'All menu types')], Menu::typeItems());
+        return ArrayHelper::merge([self::ALL_MENU_TYPES => Module::t('main', 'All menu types')], Menu::typeItems());
     }
 
     public function menuRelatedLevelItems()
     {
-        return ArrayHelper::merge([self::ALL_MENU_LEVELS => Yii::t('app', 'All menu levels')], Menu::levelItems());
+        return ArrayHelper::merge([self::ALL_MENU_LEVELS => Module::t('main', 'All menu levels')], Menu::levelItems());
     }
 
     public function relatedIdItems()

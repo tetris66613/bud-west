@@ -2,6 +2,7 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use app\modules\admin\Module;
 
 ?>
 
@@ -13,5 +14,5 @@ use yii\helpers\Html;
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'description')->textarea() ?>
 <?= $form->field($model, 'imageFile')->fileInput() ?>
-<?= Html::submitButton(Yii::t('app', 'Upload'), ['class' => 'btn btn-success']) ?>
+<?= Html::submitButton(Module::t('main', 'Upload'), ['class' => 'btn btn-success']) ?>
 <?php ActiveForm::end(); ?>

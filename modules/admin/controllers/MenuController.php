@@ -5,6 +5,7 @@ namespace app\modules\admin\controllers;
 use Yii;
 use yii\web\NotFoundHttpException;
 use app\models\Menu;
+use app\modules\admin\Module;
 use app\modules\admin\controllers\AdminController;
 use app\modules\admin\models\MenuForms;
 
@@ -37,7 +38,7 @@ class MenuController extends AdminController
         $menu = Menu::findOne($id);
 
         if (!$menu) {
-            throw new NotFoundHttpException(Yii::t('app', 'Menu not found'));
+            throw new NotFoundHttpException(Module::t('main', 'Menu not found'));
         }
 
         $model = new MenuForms(['scenario' => MenuForms::SCENARIO_MENU_EDIT]);
@@ -65,7 +66,7 @@ class MenuController extends AdminController
             return $this->redirect(['index']);
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'Menu not found'));
+        throw new NotFoundHttpException(Module::t('main', 'Menu not found'));
     }
 
     public function actionUpdateModel($scenario)

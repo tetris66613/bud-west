@@ -8,6 +8,7 @@ use app\models\ArticleRelate;
 use app\models\ArticleType;
 use app\models\Menu;
 use app\models\CustomModel as Model;
+use app\modules\admin\Module;
 use app\widgets\Ajax;
 
 class MenuForms extends Model
@@ -116,7 +117,7 @@ class MenuForms extends Model
     public function parentItems()
     {
         if ($this->level == Menu::LEVEL_ROOT) {
-            return [0 => Yii::t('app', 'Root cannot have parent')];
+            return [0 => Module::t('main', 'Root cannot have parent')];
         }
 
         $items = Menu::find()->where(['type' => $this->type, 'level' => Menu::LEVEL_ROOT])->andWhere(['!=', 'id', $this->id])->asArray()->all();
@@ -136,13 +137,13 @@ class MenuForms extends Model
             $this->type == Menu::find()->select('type')->where(['id' => $this->id])->scalar() ||
             !Menu::find()->where(['parent' => $this->id])->count()
         ) {
-            return [self::CHILD_TYPE_CONVERSION_NO => Yii::t('app', 'Not need child type conversion')];
+            return [self::CHILD_TYPE_CONVERSION_NO => Module::t('main', 'Not need child type conversion')];
         }
 
         $items = [
-            self::CHILD_TYPE_CONVERSION_UPDATE => Yii::t('app', 'Update childs type'),
-            self::CHILD_TYPE_CONVERSION_HOLD => Yii::t('app', 'Not change childs type'),
-            self::CHILD_TYPE_CONVERSION_REMOVE => Yii::t('app', 'Remove childs'),
+            self::CHILD_TYPE_CONVERSION_UPDATE => Module::t('main', 'Update childs type'),
+            self::CHILD_TYPE_CONVERSION_HOLD => Module::t('main', 'Not change childs type'),
+            self::CHILD_TYPE_CONVERSION_REMOVE => Module::t('main', 'Remove childs'),
         ];
 
         if ($this->level == Menu::LEVEL_ROOT) {
@@ -163,13 +164,13 @@ class MenuForms extends Model
             $this->childTypeConversion == self::CHILD_TYPE_CONVERSION_REMOVE ||
             !Menu::find()->where(['parent' => $this->id])->count()
         ) {
-            return [self::CHILD_PARENT_CONVERSION_NO => Yii::t('app', 'Not need child parent convertion')];
+            return [self::CHILD_PARENT_CONVERSION_NO => Module::t('main', 'Not need child parent convertion')];
         }
 
         $items = [
-            self::CHILD_PARENT_CONVERSION_ROOT => Yii::t('app', 'Convert childs to roots'),
-            self::CHILD_PARENT_CONVERSION_MOVE => Yii::t('app', 'Move childs to same root'),
-            self::CHILD_PARENT_CONVERSION_REMOVE => Yii::t('app', 'Remove childs'),
+            self::CHILD_PARENT_CONVERSION_ROOT => Module::t('main', 'Convert childs to roots'),
+            self::CHILD_PARENT_CONVERSION_MOVE => Module::t('main', 'Move childs to same root'),
+            self::CHILD_PARENT_CONVERSION_REMOVE => Module::t('main', 'Remove childs'),
         ];
 
         if ($this->childTypeConversion == self::CHILD_TYPE_CONVERSION_HOLD) {

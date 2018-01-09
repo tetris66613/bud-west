@@ -7,6 +7,7 @@ use yii\web\NotFoundHttpException;
 use app\models\Article;
 use app\modules\admin\controllers\AdminController;
 use app\modules\admin\models\ArticleForms;
+use app\modules\admin\Module;
 
 class ArticleController extends AdminController
 {
@@ -37,7 +38,7 @@ class ArticleController extends AdminController
         $article = Article::find()->where(['articles.id' => $id])->joinWith('articleRelate')->one();
 
         if (!$article) {
-            throw new NotFoundHttpException(Yii::t('main', 'Article not found'));
+            throw new NotFoundHttpException(Module::t('main', 'Article not found'));
         }
 
         $model = new ArticleForms(['scenario' => ArticleForms::SCENARIO_EDIT]);
@@ -64,7 +65,7 @@ class ArticleController extends AdminController
             return $this->redirect(['index']);
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'Article not found'));
+        throw new NotFoundHttpException(Module::t('main', 'Article not found'));
     }
 
     public function actionUpdateModel($scenario)
