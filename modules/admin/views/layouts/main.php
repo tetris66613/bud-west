@@ -38,7 +38,7 @@ AdminAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => Module::t('main', 'Client area'), 'url' => ['/site/index']],
             ['label' => Module::t('main', 'Users'), 'url' => ['/admin/user/index']],
             ['label' => Module::t('main', 'Menus'), 'url' => ['/admin/menu/index']],
             ['label' => Module::t('main', 'Articles'), 'url' => ['/admin/article/index']],
@@ -49,7 +49,7 @@ AdminAsset::register($this);
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->email . ')',
+                    Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->email . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()

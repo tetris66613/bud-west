@@ -29,7 +29,7 @@ class Menu extends ActiveRecord
         return 'menus';
     }
 
-    public function attributeLavels()
+    public function attributeLabels()
     {
         return [
             'type' => Yii::t('app', 'Type'),
@@ -134,6 +134,12 @@ class Menu extends ActiveRecord
 
     public function renderParentTitle()
     {
-        return ($this->parentRelation) ? $this->parentRelation->title : Yii::t('app', 'No parent');
+        if ($this->parentRelation) {
+            return $this->parentRelation->title;
+        } elseif ($this->parent != Menu::PARENT_NO) {
+            return $this->parent;
+        } else {
+            return Yii::t('app', 'No parent');
+        }
     }
 }

@@ -4,6 +4,7 @@ use yii\grid\GridView;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use app\widgets\Glyphicon;
+use app\modules\admin\Module;
 
 ?>
 
@@ -23,7 +24,6 @@ use app\widgets\Glyphicon;
                 return $data->renderLevel();
             },
         ],
-        'parent',
         [
             'attribute' => 'parent',
             'value' => function ($data) {
@@ -41,10 +41,10 @@ use app\widgets\Glyphicon;
         [
             'class' => ActionColumn::className(),
             'template' => '{edit}',
-            'header' => Html::a(Glyphicon::icon('plus') . ' Create', ['create'], ['class' => 'btn btn-sm btn-success']),
+            'header' => Html::a(Glyphicon::icon('plus') . ' ' . Module::t('main', 'Create'), ['create'], ['class' => 'btn btn-sm btn-success']),
             'buttons' => [
                 'edit' => function($url, $model) {
-                    return Html::a(Glyphicon::icon('pencil') . ' Edit', ['edit', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']);
+                    return Html::a(Glyphicon::icon('pencil') . ' ' . Module::t('main', 'Edit'), ['edit', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']);
                 },
             ],
         ],

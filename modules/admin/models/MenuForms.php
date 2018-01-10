@@ -297,15 +297,9 @@ class MenuForms extends Model
 
     public function attributeLabels()
     {
-        return [
-            'type' => Module::t('main', 'Type'),
-            'level' => Module::t('main', 'Level'),
-            'parent' => Module::t('main', 'Parent'),
-            'order' => Module::t('main', 'Order'),
-            'enabled' => Module::t('main', 'Enabled'),
-            'title' => Module::t('main', 'Title'),
+        return array_merge(Menu::attributeLabels(), [
             'childTypeConversion' => Module::t('main', 'Child type conversion'),
             'childParentConversion' => Module::t('main', 'Child parent conversion'),
-        ];
+        ]);
     }
 }

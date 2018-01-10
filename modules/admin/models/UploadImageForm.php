@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 use app\models\UploadImage;
+use app\modules\Admin\Module;
 
 class UploadImageForm extends Model
 {
@@ -29,7 +30,11 @@ class UploadImageForm extends Model
 
             if ($this->validate()) {
                 $uploadImage = new UploadImage();
+                /* TODO - check yii2 why not work this
                 $uploadImage->setAttributes($this->getAttributes());
+                 */
+                $uploadImage->title = $this->title;
+                $uploadImage->description = $this->description;
 
                 if ($uploadImage->save()) {
                     $path = 'uploads/' . $uploadImage->id . '.' . $this->imageFile->extension;
@@ -38,10 +43,16 @@ class UploadImageForm extends Model
                     $this->imageFile->saveAs($path);
                     return true;
                 }
-                return true;
             }
         }
 
         return false;
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(UploadImage::attributeLabels(), [
+            'imageFile' => Module::t('main', 'Image File'),
+        ]);
     }
 }

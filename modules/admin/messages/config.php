@@ -7,8 +7,8 @@ return [
     'translator' => 'Module::t',
     'sort' => false,
     'overwrite' => true,
-    'removeUnused' => false,
-    'markUnused' => true,
+    'removeUnused' => true,
+    'markUnused' => false,
     'except' => [
 
     ],

@@ -42,6 +42,13 @@ class UserForms extends Model
         return $this->getScenario();
     }
 
+    public function attributeLabels()
+    {
+        return array_merge(User::attributeLabels(), [
+            'password' => Module::t('main', 'New password'),
+        ]);
+    }
+
     public function rules()
     {
         return [

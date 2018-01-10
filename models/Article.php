@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\data\ActiveDataProvider;
 
@@ -39,7 +40,7 @@ class Article extends ActiveRecord
         return $this->hasOne(ArticleRelate::className(), ['article_id' => 'id']);
     }
 
-    public function attributeLavels()
+    public function attributeLabels()
     {
         return [
             'title' => Yii::t('app', 'Title'),
