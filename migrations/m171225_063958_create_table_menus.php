@@ -7,7 +7,7 @@ class m171225_063958_create_table_menus extends Migration
 {
     public function safeUp()
     {
-        $this->createTable('menus', [
+        $this->createTable(Menu::tableName(), [
             'id' => $this->primaryKey(),
             'type' => $this->smallInteger()->notNull()->defaultValue(Menu::defaultType()),
             'level' => $this->smallInteger()->notNull()->defaultValue(Menu::defaultLevel()),
@@ -20,6 +20,6 @@ class m171225_063958_create_table_menus extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('menus');
+        $this->dropTable(Menu::tableName());
     }
 }

@@ -17,8 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Change password' => 'Змінити пароль',
     'Not need child parent convertion' => '',
     'Not need child type conversion' => '',
+    'Password' => 'Пароль',
+    'Password repeat' => 'Повторіть пароль',
     'Root cannot have parent' => '',
     'All menu levels' => 'Всі рівні меню',
     'All menu types' => 'Всі типи меню',
@@ -38,7 +41,6 @@ return [
     'Menu type' => 'Тип меню',
     'Menus' => 'Меню',
     'Move childs to same root' => 'Перемістити дочірні елеметни в той же корінь',
-    'New password' => 'Новий пароль',
     'Not change childs type' => 'Не змінювати тип дочірніх елементів',
     'Password mismatch' => 'Пароль неспівпадає',
     'Relate with' => 'Зв\'язати з',

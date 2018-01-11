@@ -3,7 +3,7 @@
 namespace app\modules\admin\models;
 
 use Yii;
-use yii\base\Model;
+use app\models\CustomModel as Model;
 use app\models\User;
 use app\modules\admin\Module;
 
@@ -19,7 +19,7 @@ class UserForms extends Model
     public $role = User::ROLE_ADMIN;
     public $password;
     public $changePassword;
-    public $changePasswordConfirm;
+    public $passwordConfirm;
 
     protected $curUser = 0;
 
@@ -28,10 +28,10 @@ class UserForms extends Model
         $parentScenarios = parent::scenarios();
 
         $scenarios = [
-            self::SCENARIO_USER_CREATE => ['email', 'username', 'role', 'password'],
-            self::SCENARIO_USER_EDIT => ['id', 'email', 'username', 'role', 'changePassword', 'changePasswordConfirm'],
+            self::SCENARIO_USER_CREATE => ['email', 'username', 'role', 'password', 'passwordConfirm'],
+            self::SCENARIO_USER_EDIT => ['id', 'email', 'username', 'role', 'changePassword', 'passwordConfirm'],
             // not allow change role for themself, example - make themself not admin
-            self::SCENARIO_USER_SELFEDIT => ['id', 'email', 'username', 'changePassword', 'changePasswordConfirm'],
+            self::SCENARIO_USER_SELFEDIT => ['id', 'email', 'username', 'changePassword', 'passwordConfirm'],
         ];
 
         return $scenarios + parent::scenarios();
@@ -45,7 +45,9 @@ class UserForms extends Model
     public function attributeLabels()
     {
         return array_merge(User::attributeLabels(), [
-            'password' => Module::t('main', 'New password'),
+            'password' => Module::t('main', 'Password'),
+            'changePassword' => Module::t('main', 'Change password'),
+            'passwordConfirm' => Module::t('main', 'Password repeat'),
         ]);
     }
 
@@ -60,8 +62,8 @@ class UserForms extends Model
             [['email', 'username'], 'unique', 'targetClass' => User::className(), 'on' => [self::SCENARIO_USER_CREATE]],
             [['email', 'username'], 'validateUniqueOnChangeOnly', 'on' => [self::SCENARIO_USER_EDIT, self::SCENARIO_USER_SELFEDIT]],
             ['role', 'in', 'range' => array_keys(User::rolesItems())],
-            [['changePassword', 'changePasswordConfirm'], 'filter', 'filter' => 'trim'],
-            ['changePassword', 'validateChangePassword'],
+            [['password', 'changePassword', 'passwordConfirm'], 'filter', 'filter' => 'trim'],
+            [['password', 'changePassword'], 'validateChangePassword'],
         ];
     }
 
@@ -70,7 +72,7 @@ class UserForms extends Model
         if (empty($this->$attr)) {
             return;
         }
-        if ($this->$attr !== $this->changePasswordConfirm) {
+        if ($this->$attr !== $this->passwordConfirm) {
             $this->addError($attr, Module::t('main', 'Password mismatch'));
         }
     }
@@ -95,11 +97,34 @@ class UserForms extends Model
         }
     }
 
-
-
     public function rolesItems()
     {
         return User::rolesItems();
+    }
+
+    public function renderRoleField($form)
+    {
+        return $form->field($this, 'role')->dropDownList($this->rolesItems());
+    }
+
+    public function renderPasswordField($form)
+    {
+        return $this->renderPasswordInput($form, 'password');
+    }
+
+    public function renderChangePasswordField($form)
+    {
+        return $this->renderPasswordInput($form, 'changePassword');
+    }
+
+    public function renderPasswordConfirmField($form)
+    {
+        return $this->renderPasswordInput($form, 'passwordConfirm');
+    }
+
+    public function renderPasswordInput($form, $attribute)
+    {
+        return $form->field($this, $attribute)->passwordInput();
     }
 
     public function requestCreate()

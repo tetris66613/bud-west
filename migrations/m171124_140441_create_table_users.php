@@ -1,12 +1,13 @@
 <?php
 
 use yii\db\Migration;
+use app\models\User;
 
 class m171124_140441_create_table_users extends Migration
 {
     public function safeUp()
     {
-        $this->createTable('users', [
+        $this->createTable(User::tableName(), [
             'id' => $this->primaryKey(),
             'username' => $this->string(32)->unique(),
             'email' => $this->string(256)->notNull()->unique(),
@@ -19,7 +20,7 @@ class m171124_140441_create_table_users extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('users');
+        $this->dropTable(User::tableName());
         // echo 'not available to drop users table' . PHP_EOL;
         // return false;
     }
