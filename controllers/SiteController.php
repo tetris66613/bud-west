@@ -4,9 +4,9 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+use app\controllers\ClientController as Controller;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
@@ -99,5 +99,11 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionMaintance()
+    {
+        $this->layout = 'maintance';
+        return $this->render('maintance');
     }
 }
