@@ -43,6 +43,7 @@ AdminAsset::register($this);
             ['label' => Module::t('main', 'Menus'), 'url' => ['/admin/menu/index']],
             ['label' => Module::t('main', 'Articles'), 'url' => ['/admin/article/index']],
             ['label' => Module::t('main', 'Images'), 'url' => ['/admin/image/index']],
+            ['label' => Module::t('main', 'Settings'), 'url' => ['/admin/settings/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
