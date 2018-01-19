@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Logout' => 'Вихід',
+    'Site under maintance' => 'Сайт на технічному обслуговуванні',
     'Url' => '',
     'Admin' => 'Адмін',
     'Administrator' => 'Адміністратор',
@@ -32,6 +32,7 @@ return [
     'Home' => 'Головна',
     'Level' => 'Рівень',
     'Login' => 'Вхід',
+    'Logout' => 'Вихід',
     'Menu' => 'Меню',
     'No parent' => '-корінь-',
     'No relate' => 'Нема відношення',
