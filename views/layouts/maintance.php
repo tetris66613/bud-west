@@ -14,12 +14,8 @@ MaintanceAsset::register($this);
 </head>
 <body>
     <?= $this->beginBody() ?>
-    <div class="header">
-    </div>
     <div class="content">
         <?= $content ?>
-    </div>
-    <div class="footer">
     </div>
     <?= $this->endBody() ?>
 </body>

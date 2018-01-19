@@ -21,7 +21,7 @@ body {
     border-bottom-width: 0;
 }
 .content {
-    height: 50%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
