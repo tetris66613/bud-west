@@ -1,5 +1,7 @@
 <?php
 
+$this->title = Yii::t('app', 'Site under maintance');
+
 ?>
 
-<?= Yii::t('app', 'Site under maintance') ?>
+<?= $this->title ?>

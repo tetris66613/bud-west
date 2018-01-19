@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Html;
 use app\assets\MaintanceAsset;
 
 MaintanceAsset::register($this);
@@ -9,7 +10,7 @@ MaintanceAsset::register($this);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Site under maintance</title>
+    <title><?= Html::encode($this->title) ?></title>
     <?= $this->head() ?>
 </head>
 <body>
