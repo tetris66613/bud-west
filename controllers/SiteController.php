@@ -10,6 +10,7 @@ use app\controllers\ClientController as Controller;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+use app\models\Settings;
 
 class SiteController extends Controller
 {
@@ -103,6 +104,9 @@ class SiteController extends Controller
 
     public function actionMaintance()
     {
+        if (!Yii::$app->session->getFlash('maintance-redirect') && !Settings::isMaintance()) {
+            return $this->redirect(['login']);
+        }
         $this->layout = 'maintance';
         return $this->render('maintance');
     }
