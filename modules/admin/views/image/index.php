@@ -16,8 +16,13 @@ use app\modules\admin\Module;
         'url',
         [
             'class' => ActionColumn::className(),
-            'template' => '',
-            'header' => Html::a(Glyphicon::icon('plus') . ' ' . Module::t('main', 'Upload'), ['upload'], ['class' => 'btn btn-sm btn-success']),
+            'template' => '{download}',
+            'header' => Html::a(Glyphicon::icon('upload') . ' ' . Module::t('main', 'Upload'), ['upload'], ['class' => 'btn btn-sm btn-success']),
+            'buttons' => [
+                'download' => function($url, $model) {
+                    return Html::a(Glyphicon::icon('download-alt') . ' ' . Module::t('main', 'Download'), ['download', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
+                }
+            ],
         ],
     ],
 ]) ?>

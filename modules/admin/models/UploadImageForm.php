@@ -35,10 +35,14 @@ class UploadImageForm extends Model
                  */
                 $uploadImage->title = $this->title;
                 $uploadImage->description = $this->description;
+                $uploadImage->filename = $this->imageFile->name;
+                $uploadImage->mimetype = $this->imageFile->type;
+                $uploadImage->data = file_get_contents($this->imageFile->tempName);
 
                 if ($uploadImage->save()) {
                     $path = 'uploads/' . $uploadImage->id . '.' . $this->imageFile->extension;
                     $uploadImage->url = '/' . $path;
+
                     $uploadImage->update();
                     $this->imageFile->saveAs($path);
                     return true;

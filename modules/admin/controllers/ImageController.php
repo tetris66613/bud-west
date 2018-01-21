@@ -6,6 +6,7 @@ use Yii;
 use app\models\UploadImage;
 use app\modules\admin\controllers\AdminController;
 use app\modules\admin\models\UploadImageForm;
+use app\modules\admin\Module;
 
 class ImageController extends AdminController
 {
@@ -28,6 +29,19 @@ class ImageController extends AdminController
 
         return $this->render('upload', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionDownload($id)
+    {
+        $uploadImage = UploadImage::findOne($id);
+        if (!$uploadImage) {
+            throw new \yii\web\NotFoundHttpException(Module::t('main', 'Image not found'));
+        }
+        $fileContent = $uploadImage->data;
+
+        Yii::$app->response->sendContentAsFile($uploadImage->data, $uploadImage->filename, [
+            'mimeType' => $uploadImage->mimetype,
         ]);
     }
 }

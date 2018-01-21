@@ -16,7 +16,7 @@ class UploadImage extends ActiveRecord
     public static function gridData()
     {
         return new ActiveDataProvider([
-            'query' => self::find()->select(['title', 'description', 'url']),
+            'query' => self::find()->select(['id', 'title', 'description', 'url']),
             'pagination' => [
                 'pageSize' => 20,
             ],
