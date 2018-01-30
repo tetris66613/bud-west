@@ -7,6 +7,13 @@ class m171225_063958_create_table_menus extends Migration
 {
     public function safeUp()
     {
+        $tableOptions = '';
+        switch ($this->db->driverName) {
+            case 'mysql':
+                $tableOptions = 'ENGINE=InnoDB';
+                break;
+        }
+
         $this->createTable(Menu::tableName(), [
             'id' => $this->primaryKey(),
             'type' => $this->smallInteger()->notNull()->defaultValue(Menu::defaultType()),
@@ -15,7 +22,7 @@ class m171225_063958_create_table_menus extends Migration
             'order' => $this->smallInteger()->notNull()->defaultValue(Menu::defaultOrder()),
             'enabled' => $this->smallInteger()->notNull()->defaultValue(Menu::defaultEnabled()),
             'title' => $this->text()->notNull(),
-        ]);
+        ], $tableOptions);
     }
 
     public function safeDown()

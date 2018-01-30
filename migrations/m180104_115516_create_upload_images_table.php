@@ -14,10 +14,11 @@ class m180104_115516_create_upload_images_table extends Migration
     public function up()
     {
         $data = '';
-
+        $tableOptions = '';
         switch ($this->db->driverName) {
             case 'mysql':
                 $data = 'MEDIUMBLOB NOT NULL';
+                $tableOptions = 'ENGINE=InnoDB';
                 break;
             default:
                 $data = $this->binary()->notNull();

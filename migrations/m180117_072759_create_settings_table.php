@@ -13,11 +13,18 @@ class m180117_072759_create_settings_table extends Migration
      */
     public function up()
     {
+        $tableOptions = '';
+        switch ($this->db->driverName) {
+            case 'mysql':
+                $tableOptions = 'ENGINE=InnoDB';
+                break;
+        }
+
         $this->createTable(Settings::tableName(), [
             'id' => $this->primaryKey(),
             'name' => $this->string(80)->notNull()->unique(),
             'value' => $this->text()->notNull(),
-        ]);
+        ], $tableOptions);
     }
 
     /**
