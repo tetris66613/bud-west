@@ -13,10 +13,21 @@ class m171229_062312_create_articles_table extends Migration
      */
     public function up()
     {
+        $content = '';
+
+        switch ($this->db->driverName) {
+            case 'mysql':
+                $content = 'MEDIUMTEXT NOT NULL';
+                break;
+            default:
+                $content = $this->text()->notNull();
+        }
+
         $this->createTable(Article::tableName(), [
             'id' => $this->primaryKey(),
             'title' => $this->text()->notNull(),
-            'content' => $this->text()->notNull(),
+            'description' => $this->text()->notNull(),
+            'content' => $content,
         ]);
     }
 

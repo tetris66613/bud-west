@@ -24,6 +24,7 @@ class ArticleForms extends Model
 
     public $id = 0;
     public $title;
+    public $description;
     public $content;
     public $relatedType = ArticleType::RELATE_NO;
     public $menuRelatedType = self::ALL_MENU_TYPES;
@@ -42,8 +43,8 @@ class ArticleForms extends Model
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            self::SCENARIO_CREATE => ['title', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
-            self::SCENARIO_EDIT => ['id', 'title', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
+            self::SCENARIO_CREATE => ['title', 'description', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
+            self::SCENARIO_EDIT => ['id', 'title', 'description', 'content', 'relatedType', 'menuRelatedType', 'menuRelatedLevel', 'relatedId'],
             self::SCENARIO_DELETE => ['id'],
         ]);
     }
@@ -57,8 +58,9 @@ class ArticleForms extends Model
     {
         return [
             [['id', 'title', 'content'], 'required'],
-            [['title', 'content'], 'filter', 'filter' => 'trim'],
+            [['title', 'content', 'description'], 'filter', 'filter' => 'trim'],
             [['title', 'content'], 'string'],
+            ['description', 'default', 'value' => ''],
             ['relatedType', 'in', 'range' => array_keys($this->relateTypeItems())],
         ];
     }
@@ -69,7 +71,15 @@ class ArticleForms extends Model
             ['menuRelatedType', 'in', 'range' => array_keys($this->menuRelatedTypeItems())],
             ['menuRelatedLevel', 'in', 'range' => array_keys($this->menuRelatedLevelItems())],
             ['relatedId', 'in', 'range' => array_keys($this->relatedIdItems())],
+            ['relatedType', 'validateRelatedType'],
         ];
+    }
+
+    public function validateRelatedType($attr, $params)
+    {
+        if ($this->$attr && !$this->relatedId) {
+            $this->addError($this->$attr, Module::t('main', 'Cannot use related type without relate'));
+        }
     }
 
     public function setRelatedAttributes($related)
@@ -82,6 +92,7 @@ class ArticleForms extends Model
 
     public function relateTypeItems()
     {
+        if (!$this->relatedIdItems()) return ArticleType::typeNoItem();
         return ArticleType::typeItems(false);
     }
 
@@ -123,6 +134,22 @@ class ArticleForms extends Model
 
         $items = ArrayHelper::map($query->asArray()->all(), 'id', 'title');
         return $items;
+    }
+
+    public function renderDescriptionField($form)
+    {
+        return $form->field($this, 'description')->widget(TinyMce::className(), [
+            'language' => Yii::$app->language,
+            'options' => ['rows' => 8],
+            'clientOptions' => [
+                'plugins' => [
+                    "advlist autolink lists link charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table contextmenu paste image"
+                ],
+                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+            ],
+        ]);
     }
 
     public function renderContentField($form)
@@ -197,9 +224,17 @@ class ArticleForms extends Model
 
             if ($article->save()) {
                 if ($this->relatedType) {
-                    $articleRelate = $article->articleRelate;
-                    $articleRelate->related_id = $this->relatedId;
-                    $articleRelate->type_id = $this->relatedType;
+                    if (!$article->articleRelate) {
+                        $articleRelate = new ArticleRelate([
+                            'article_id' => $article->id,
+                            'type_id' => $this->relatedType,
+                            'related_id' => $this->relatedId,
+                        ]);
+                    } else {
+                        $articleRelate = $article->articleRelate;
+                        $articleRelate->related_id = $this->relatedId;
+                        $articleRelate->type_id = $this->relatedType;
+                    }
 
                     if ($articleRelate->save()) {
                         return true;

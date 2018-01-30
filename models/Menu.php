@@ -46,6 +46,57 @@ class Menu extends ActiveRecord
         return $this->hasOne(self::className(), ['id' => 'parent']);
     }
 
+    public function getChildsRelation()
+    {
+        return $this->hasMany(self::className(), ['parent' => 'id']);
+    }
+
+    public function getArticleRelation()
+    {
+        return $this->hasOne(ArticleRelate::className(), ['related_id' => 'id']);
+    }
+
+    public function selectEnabledItems($type = self::TYPE_CLIENT_NAVBAR)
+    {
+        return self::find()
+            ->with('childsRelation')
+            ->where([
+                'type' => $type,
+                'enabled' => self::ENABLED_TRUE,
+                'parent' => self::PARENT_NO
+            ])
+            ->orderBy(['order' => SORT_ASC])
+            ->asArray()
+            ->all();
+    }
+
+    public function buildNavItems($type = self::TYPE_CLIENT_NAVBAR)
+    {
+        $records = self::selectEnabledItems($type);
+        $items = [];
+        foreach ($records as $record) {
+            if (!empty($record['childsRelation'])) {
+                $subItems = [];
+                foreach ($record['childsRelation'] as $child) {
+                    $subItems[] = [
+                        'label' => $child['title'],
+                        'url' => ['menu/view', 'id' => $child['id']],
+                    ];
+                }
+                $items[] = ['label' => $record['title'], 'items' => $subItems];
+            } else {
+                $items[] = [
+                    'label' => $record['title'],
+                    'url' => ['menu/view', 'id' => $record['id']],
+                ];
+            }
+
+        }
+
+        return $items;
+
+    }
+
     public function rules()
     {
         return [

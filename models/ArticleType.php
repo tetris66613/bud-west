@@ -30,4 +30,11 @@ class ArticleType extends Model
 
         return $items;
     }
+
+    public static function typeNoItem()
+    {
+        return [
+            self::RELATE_NO => Yii::t('app', 'No relate'),
+        ];
+    }
 }

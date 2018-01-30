@@ -17,6 +17,7 @@ class Article extends ActiveRecord
     {
         return [
             [['title', 'content'], 'required'],
+            ['description', 'default', 'value' => ''],
         ];
     }
 
@@ -44,6 +45,7 @@ class Article extends ActiveRecord
     {
         return [
             'title' => Yii::t('app', 'Title'),
+            'description' => Yii::t('app', 'Description'),
             'content' => Yii::t('app', 'Content'),
         ];
     }

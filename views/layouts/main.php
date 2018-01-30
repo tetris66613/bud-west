@@ -35,24 +35,30 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
-            User::checkIsAdmin() ? ['label' => Yii::t('app', 'Admin'), 'url' => ['/admin']] : '',
-            Yii::$app->user->isGuest ? (
-                ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    Yii::t('app', 'Logout') .  ' (' . Yii::$app->user->identity->email . ')',
+    $clientMenuItems = [
+        ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
+    ];
+    $clientMenuItems = array_merge($clientMenuItems, \app\models\Menu::buildNavItems());
+    if (User::checkIsAdmin()) {
+        $clientMenuItems[] = ['label' => Yii::t('app', 'Admin'), 'url' => ['/admin']];
+    }
+    if (Yii::$app->user->isGuest) {
+        $clientMenuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
+    } else {
+        $clientMenuItems[] = ''
+            . '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                Yii::t('app', 'Logout') .  ' (' . Yii::$app->user->identity->email . ')',
                     ['class' => 'btn btn-link logout']
                 )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
+            . Html::endForm()
+            . '</li>';
+    }
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => $clientMenuItems,
     ]);
     NavBar::end();
     ?>
