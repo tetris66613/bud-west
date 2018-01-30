@@ -55,7 +55,8 @@ class UploadImageForm extends Model
 
     public function attributeLabels()
     {
-        return array_merge(UploadImage::attributeLabels(), [
+        $uploadImage = new UploadImage;
+        return array_merge($uploadImage->attributeLabels(), [
             'imageFile' => Module::t('main', 'Image File'),
         ]);
     }

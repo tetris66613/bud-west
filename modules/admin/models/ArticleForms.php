@@ -264,7 +264,8 @@ class ArticleForms extends Model
 
     public function attributeLabels()
     {
-        return array_merge(Article::attributeLabels(), [
+        $article = new Article();
+        return array_merge($article->attributeLabels(), [
             'relatedType' => Module::t('main', 'Related type'),
             'menuRelatedType' => Module::t('main', 'Menu type'),
             'menuRelatedLevel' => Module::t('main', 'Menu level'),

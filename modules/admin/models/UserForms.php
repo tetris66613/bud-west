@@ -44,7 +44,8 @@ class UserForms extends Model
 
     public function attributeLabels()
     {
-        return array_merge(User::attributeLabels(), [
+        $user = new User;
+        return array_merge($user->attributeLabels(), [
             'password' => Module::t('main', 'Password'),
             'changePassword' => Module::t('main', 'Change password'),
             'passwordConfirm' => Module::t('main', 'Password repeat'),

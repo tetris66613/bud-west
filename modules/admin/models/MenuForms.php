@@ -297,7 +297,8 @@ class MenuForms extends Model
 
     public function attributeLabels()
     {
-        return array_merge(Menu::attributeLabels(), [
+        $menu = new Menu();
+        return array_merge($menu->attributeLabels(), [
             'childTypeConversion' => Module::t('main', 'Child type conversion'),
             'childParentConversion' => Module::t('main', 'Child parent conversion'),
         ]);
