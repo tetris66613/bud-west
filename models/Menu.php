@@ -56,7 +56,7 @@ class Menu extends ActiveRecord
         return $this->hasOne(ArticleRelate::className(), ['related_id' => 'id']);
     }
 
-    public function selectEnabledItems($type)
+    public static function selectEnabledItems($type)
     {
         return self::find()
             ->with('childsRelation')
@@ -70,7 +70,7 @@ class Menu extends ActiveRecord
             ->all();
     }
 
-    public function buildNavItems($type, $options = [])
+    public static function buildNavItems($type, $options = [])
     {
         $records = self::selectEnabledItems($type);
         $items = [];
