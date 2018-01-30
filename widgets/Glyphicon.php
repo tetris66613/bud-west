@@ -25,7 +25,7 @@ class Glyphicon extends Widget
         return Html::tag($this->tag, $this->content, $this->tagOptions);
     }
 
-    public function icon($icon, $config = [])
+    public static function icon($icon, $config = [])
     {
         $config['icon'] = $icon;
 
