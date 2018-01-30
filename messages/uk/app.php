@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Site under maintance' => 'Сайт на технічному обслуговуванні',
+    'Sidebar' => 'Праве меню',
     'Url' => '',
     'Admin' => 'Адмін',
     'Administrator' => 'Адміністратор',
@@ -45,8 +45,8 @@ return [
     'Relate menu unique' => 'Відносити до конктетного меню',
     'Remember me' => 'Запам\'ятати мене',
     'Role' => 'Роль',
+    'Site under maintance' => 'Сайт на технічному обслуговуванні',
     'Submenu' => 'Підменю',
-    'Test type' => 'Тестовий тип',
     'Title' => 'Заголовок',
     'Type' => 'Тип',
     'Unknown menu enabled status' => 'Невідомий статус чи включений меню',

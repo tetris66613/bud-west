@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\User;
+use app\models\Menu;
 
 AppAsset::register($this);
 ?>
@@ -38,7 +39,7 @@ AppAsset::register($this);
     $clientMenuItems = [
         ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
     ];
-    $clientMenuItems = array_merge($clientMenuItems, \app\models\Menu::buildNavItems());
+    $clientMenuItems = array_merge($clientMenuItems, Menu::buildNavItems(Menu::TYPE_CLIENT_NAVBAR));
     if (User::checkIsAdmin()) {
         $clientMenuItems[] = ['label' => Yii::t('app', 'Admin'), 'url' => ['/admin']];
     }
@@ -67,7 +68,17 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= $content ?>
+        <div class="row">
+            <div class="col-md-10">
+                <?= $content ?>
+            </div>
+            <div class="col-md-2">
+                <?= Nav::widget([
+                    'options' => ['class' => 'list-group'],
+                    'items' => Menu::buildNavItems(Menu::TYPE_SIDEBAR, ['linkOptions' => ['class' => 'list-group-item']]),
+                ]) ?>
+            </div>
+        </div>
     </div>
 </div>
 

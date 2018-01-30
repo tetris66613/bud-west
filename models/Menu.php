@@ -10,7 +10,7 @@ class Menu extends ActiveRecord
 {
     // predefined menus types
     const TYPE_CLIENT_NAVBAR = 1;
-    const TYPE_TEST = 2;
+    const TYPE_SIDEBAR = 2;
 
     const LEVEL_ROOT = 0;
     const LEVEL_CHILD_1 = 1;
@@ -56,7 +56,7 @@ class Menu extends ActiveRecord
         return $this->hasOne(ArticleRelate::className(), ['related_id' => 'id']);
     }
 
-    public function selectEnabledItems($type = self::TYPE_CLIENT_NAVBAR)
+    public function selectEnabledItems($type)
     {
         return self::find()
             ->with('childsRelation')
@@ -70,10 +70,11 @@ class Menu extends ActiveRecord
             ->all();
     }
 
-    public function buildNavItems($type = self::TYPE_CLIENT_NAVBAR)
+    public function buildNavItems($type, $options = [])
     {
         $records = self::selectEnabledItems($type);
         $items = [];
+        $linkOptions = isset($options['linkOptions']) ? $options['linkOptions'] : [];
         foreach ($records as $record) {
             if (!empty($record['childsRelation'])) {
                 $subItems = [];
@@ -81,6 +82,7 @@ class Menu extends ActiveRecord
                     $subItems[] = [
                         'label' => $child['title'],
                         'url' => ['menu/view', 'id' => $child['id']],
+                        'linkOptions' => $linkOptions,
                     ];
                 }
                 $items[] = ['label' => $record['title'], 'items' => $subItems];
@@ -88,6 +90,7 @@ class Menu extends ActiveRecord
                 $items[] = [
                     'label' => $record['title'],
                     'url' => ['menu/view', 'id' => $record['id']],
+                    'linkOptions' => $linkOptions,
                 ];
             }
 
@@ -133,7 +136,7 @@ class Menu extends ActiveRecord
     {
         return [
             self::TYPE_CLIENT_NAVBAR => Yii::t('app', 'Client navbar'),
-            self::TYPE_TEST => Yii::t('app', 'Test type'),
+            self::TYPE_SIDEBAR => Yii::t('app', 'Sidebar'),
         ];
     }
 
