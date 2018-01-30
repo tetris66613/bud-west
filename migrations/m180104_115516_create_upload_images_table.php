@@ -32,7 +32,7 @@ class m180104_115516_create_upload_images_table extends Migration
             'mimetype' => $this->text(),
             'url' => $this->text(),
             'data' => $data,
-        ]);
+        ], $tableOptions);
     }
 
     /**
