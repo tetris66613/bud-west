@@ -21,7 +21,7 @@ class Article extends ActiveRecord
         ];
     }
 
-    public function gridData()
+    public static function gridData()
     {
         return new ActiveDataProvider([
             'query' => self::find()->select(['id', 'title']),
