@@ -37,7 +37,7 @@ class Ajax extends Widget
         ";
     }
 
-    public function post($action, $replacement = '', $config = [])
+    public static function post($action, $replacement = '', $config = [])
     {
         $config['action'] = $action;
         if (!empty($replacement) && is_string($replacement)) {
