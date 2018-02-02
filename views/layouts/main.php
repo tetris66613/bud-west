@@ -10,6 +10,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\User;
 use app\models\Menu;
+use app\models\Settings;
 
 AppAsset::register($this);
 ?>
@@ -30,10 +31,10 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => Html::img('logo.png'),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-default navbar-fixed-top',
         ],
     ]);
     $clientMenuItems = [
@@ -42,23 +43,23 @@ AppAsset::register($this);
     $clientMenuItems = array_merge($clientMenuItems, Menu::buildNavItems(Menu::TYPE_CLIENT_NAVBAR));
     if (User::checkIsAdmin()) {
         $clientMenuItems[] = ['label' => Yii::t('app', 'Admin'), 'url' => ['/admin']];
-    }
-    if (Yii::$app->user->isGuest) {
-        $clientMenuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
-    } else {
-        $clientMenuItems[] = ''
-            . '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                Yii::t('app', 'Logout') .  ' (' . Yii::$app->user->identity->email . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-            . Html::endForm()
-            . '</li>';
+        if (Yii::$app->user->isGuest) {
+            $clientMenuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
+        } else {
+            $clientMenuItems[] = ''
+                . '<li>'
+                . Html::beginForm(['/site/logout'], 'post')
+                . Html::submitButton(
+                    Yii::t('app', 'Logout') .  ' (' . Yii::$app->user->identity->email . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                . Html::endForm()
+                . '</li>';
+        }
     }
 
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' => 'nav_client navbar-nav navbar-right'],
         'items' => $clientMenuItems,
     ]);
     NavBar::end();
@@ -72,7 +73,7 @@ AppAsset::register($this);
             <div class="col-md-10">
                 <?= $content ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="margin-top:10px">
                 <?= Nav::widget([
                     'options' => ['class' => 'list-group'],
                     'items' => Menu::buildNavItems(Menu::TYPE_SIDEBAR, ['linkOptions' => ['class' => 'list-group-item']]),
@@ -84,9 +85,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Settings::findValueByName('companyName', Settings::DEFAULT_COMPANY_NAME), ' ', date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right"></p>
     </div>
 </footer>
 

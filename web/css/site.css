@@ -11,7 +11,7 @@ body {
 }
 
 .wrap > .container {
-    padding: 70px 15px 20px;
+    padding: 120px 15px 20px;
 }
 
 .footer {
@@ -112,4 +112,23 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+/* Add new css styles */
+.navbar-brand {
+    height: 120px;
+}
+
+.navbar-brand > img {
+    height: 100px;
+}
+
+.nav_client.nav > li > a {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.navbar-toogle {
+    padding: 10px;
+    margin: 25px 15px 25px 0;
 }

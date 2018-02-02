@@ -8,6 +8,8 @@ use yii\helpers\ArrayHelper;
 
 class Settings extends ActiveRecord
 {
+    const DEFAULT_COMPANY_NAME = 'BUDWEST';
+
     public static function selectAll()
     {
         static $names = null;
@@ -18,7 +20,7 @@ class Settings extends ActiveRecord
         return $names;
     }
 
-    public static function findValueByName($name)
+    public static function findValueByName($name, $notFoundValue = null)
     {
         $names = self::selectAll();
 
@@ -29,7 +31,7 @@ class Settings extends ActiveRecord
             return $predefinedSettings[$name];
         }
 
-        return null;
+        return $notFoundValue;
     }
 
     public static function isMaintance()
@@ -42,6 +44,7 @@ class Settings extends ActiveRecord
     {
         return [
             'maintance' => true,
+            'companyName' => self::DEFAULT_COMPANY_NAME,
         ];
     }
 }

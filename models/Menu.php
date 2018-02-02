@@ -48,7 +48,7 @@ class Menu extends ActiveRecord
 
     public function getChildsRelation()
     {
-        return $this->hasMany(self::className(), ['parent' => 'id']);
+        return $this->hasMany(self::className(), ['parent' => 'id'])->orderBy(['menus.order' => SORT_ASC]);
     }
 
     public function getArticleRelation()

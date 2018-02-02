@@ -13,6 +13,8 @@ class SettingsForm extends Model
     // can be change by admin
     public $maintance;
 
+    public $companyName;
+
     public function init()
     {
         $predefinedSettings = Settings::predefinedSettings();
@@ -30,6 +32,7 @@ class SettingsForm extends Model
             [$this->attributes(), 'required'],
             // bool attributes validator
             [['maintance'], 'in', 'range' => [0, 1]],
+            [['companyName'], 'string'],
         ];
     }
 
@@ -67,6 +70,7 @@ class SettingsForm extends Model
     {
         return [
             'maintance' => Module::t('main', 'Maintance'),
+            'companyName' => Module::t('main', 'Company Name'),
         ];
     }
 
@@ -74,6 +78,7 @@ class SettingsForm extends Model
     {
         return [
             'maintance' => Module::t('main', 'Is site under maintance, checked mean to disable user interract with site (except users with administator role)'),
+            'companyName' => Module::t('main', 'Company name would be display at some places'),
         ];
     }
 }
