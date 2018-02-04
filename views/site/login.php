@@ -11,8 +11,7 @@ $this->title = Yii::t('app', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <br>
     <p><?= Yii::t('app', 'Please fill out the following fields to login') . ':' ?></p>
 
     <?php $form = ActiveForm::begin([

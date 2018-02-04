@@ -27,58 +27,17 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $clientMenuItems = [
-        ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
-    ];
-    $clientMenuItems = array_merge($clientMenuItems, Menu::buildNavItems(Menu::TYPE_CLIENT_NAVBAR));
-    if (User::checkIsAdmin()) {
-        $clientMenuItems[] = ['label' => Yii::t('app', 'Admin'), 'url' => ['/admin']];
-    }
-    if (Yii::$app->user->isGuest) {
-        $clientMenuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
-    } else {
-        $clientMenuItems[] = ''
-            . '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                Yii::t('app', 'Logout') .  ' (' . Yii::$app->user->identity->email . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-            . Html::endForm()
-            . '</li>';
-    }
-
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $clientMenuItems,
-    ]);
-    NavBar::end();
-    ?>
-
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= $content ?>
+<div class="row">
+    <div class="col-sm-offset-2 col-sm-8">
+        <?= Html::a(Html::img('logo.png', ['class' => 'img-responsive']), ['site/index']) ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-12">
+    <?= $content ?>
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 </body>
