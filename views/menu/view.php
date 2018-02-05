@@ -13,6 +13,12 @@ $this->title = $menu['title'];
 <?php endif; ?>
 
 <?php foreach ($articleList as $article) : ?>
-    <h4><?= Html::a($article['title'], ['article/view', 'id' => $article['id']]) ?></h4>
-    <?= $article['description'] ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::a($article['title'], ['article/view', 'id' => $article['id']]) ?></h3>
+        </div>
+        <div class="panel-body">
+            <?= $article['description'] ?>
+        </div>
+    </div>
 <?php endforeach; ?>
