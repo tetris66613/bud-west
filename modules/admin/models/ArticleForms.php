@@ -136,19 +136,38 @@ class ArticleForms extends Model
         return $items;
     }
 
-    public function renderDescriptionField($form)
+    /**
+     * @param prepend - rewrites base options
+     * @param append - add additional options if in base this options not exist
+     */
+    public static function tinymceClientOptions(array $prepend = [], array $append = [])
     {
-        return $form->field($this, 'description')->widget(TinyMce::className(), [
-            'language' => Yii::$app->language,
-            'options' => ['rows' => 8],
-            'clientOptions' => [
+        return array_merge(
+            $append,
+            [
                 'plugins' => [
                     "advlist autolink lists link charmap print preview anchor",
                     "searchreplace visualblocks code fullscreen",
                     "insertdatetime media table contextmenu paste image"
                 ],
                 'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                'image_class_list' => [
+                    ['title' => 'None', 'value' => ''],
+                    ['title' => Module::t('main', 'Responsive (max width 100%)'), 'value' => 'img-responsive'],
+                ],
             ],
+            $prepend
+        );
+
+        return ;
+    }
+
+    public function renderDescriptionField($form)
+    {
+        return $form->field($this, 'description')->widget(TinyMce::className(), [
+            'language' => Yii::$app->language,
+            'options' => ['rows' => 8],
+            'clientOptions' => self::tinymceClientOptions(),
         ]);
     }
 
@@ -157,14 +176,7 @@ class ArticleForms extends Model
         return $form->field($this, 'content')->widget(TinyMce::className(), [
             'language' => Yii::$app->language,
             'options' => ['rows' => 20],
-            'clientOptions' => [
-                'plugins' => [
-                    "advlist autolink lists link charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table contextmenu paste image"
-                ],
-                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-            ],
+            'clientOptions' => self::tinymceClientOptions(),
         ]);
     }
 
