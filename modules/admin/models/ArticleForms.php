@@ -150,7 +150,7 @@ class ArticleForms extends Model
                     "searchreplace visualblocks code fullscreen",
                     "insertdatetime media table contextmenu paste image"
                 ],
-                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
                 'image_class_list' => [
                     ['title' => 'None', 'value' => ''],
                     ['title' => Module::t('main', 'Responsive (max width 100%)'), 'value' => 'img-responsive'],
